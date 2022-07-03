@@ -1,0 +1,1 @@
+# quarkus_social_application
