@@ -9,7 +9,9 @@
 
 <h2>Algumas informações</h2>
 
-<img align="center" width="205" height="212" src="https://smanager.com.br/servicos-tecnologia/quarkus/">
+<p align="center">
+<img align="center" width="305" height="150" src="https://design.jboss.org/quarkus/logo/final/PNG/quarkus_logo_vertical_rgb_1280px_default.png">
+</p>
 <br>
 
-Quarkus é um  framework Java nativo em Kubernetes e de stack completo que foi desenvolvido criado em 20 de Março de 2019 para máquinas virtuais Java (JVMs) e compilação nativa. Ele otimiza essa linguagem especificamente para containers, fazendo com que essa tecnologia seja uma plataforma eficaz para ambientes serverless, de nuvem e Kubernetes.
+Quarkus é um  framework Java nativo em Kubernetes e de stack completo que foi  criado em 20 de Março de 2019 para máquinas virtuais Java (JVMs) e compilação nativa. Ele otimiza essa linguagem especificamente para containers, fazendo com que essa tecnologia seja uma plataforma eficaz para ambientes serverless, de nuvem e Kubernetes.
