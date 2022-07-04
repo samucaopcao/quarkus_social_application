@@ -31,7 +31,7 @@ Você pode executar seu aplicativo no modo dev que permite a codificação ao vi
 
 ## Inserindo dependências via linha de comando
 
-mvnw quarkus:add-extensions -Dextensions="jdbc-h2,hibernate-orm,hibernate-orm-panache"
+mvnw quarkus:add-extensions -Dextensions="jdbc-h2,hibernate-orm,hibernate-orm-panache,"resteasy-jsonb"
 
 ## Empacotando e executando o aplicativo
 
