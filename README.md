@@ -29,6 +29,10 @@ Você pode executar seu aplicativo no modo dev que permite a codificação ao vi
 
 > <strong>**NOTA:</strong>** Quarkus agora vem com uma Dev UI, que está disponível no modo dev apenas em http://localhost:8080/q/dev/.
 
+## Inserindo dependências via linha de comando
+
+mvnw quarkus:add-extensions -Dextensions="jdbc-h2,hibernate-orm,hibernate-orm-panache"
+
 ## Empacotando e executando o aplicativo
 
 O aplicativo pode ser empacotado usando:
