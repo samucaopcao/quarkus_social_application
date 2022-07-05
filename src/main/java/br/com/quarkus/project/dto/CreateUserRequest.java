@@ -1,5 +1,6 @@
 package br.com.quarkus.project.dto;
 
+
 public class CreateUserRequest {
 
 	private String name;

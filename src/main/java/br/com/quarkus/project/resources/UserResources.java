@@ -1,5 +1,6 @@
 package br.com.quarkus.project.resources;
 
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +10,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.quarkus.project.dto.CreateUserRequest;
+import br.com.quarkus.project.model.User;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @Path("/users")
 // A anotation Consumes diz qual tipo objeto consumirei
@@ -19,12 +22,19 @@ import br.com.quarkus.project.dto.CreateUserRequest;
 public class UserResources {
 
 	@POST
+	@Transactional
 	public Response createUser(CreateUserRequest userRequest) {
-		return Response.ok(userRequest).build();
+		User user = new User();
+		user.setAge(userRequest.getAge());
+		user.setName(userRequest.getName());
+		user.persist();
+
+		return Response.ok(user).build();
 	}
 
 	@GET
 	public Response listAllUsers() {
-		return Response.ok().build();
+		PanacheQuery<User> query = User.findAll();
+		return Response.ok(query.list()).build();
 	}
 }
