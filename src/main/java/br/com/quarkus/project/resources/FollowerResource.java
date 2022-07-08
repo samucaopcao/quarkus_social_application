@@ -1,5 +1,8 @@
 package br.com.quarkus.project.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -11,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.com.quarkus.project.dto.FollowerRequest;
+import br.com.quarkus.project.dto.FollowerResponse;
+import br.com.quarkus.project.dto.FollowersPerUserResponse;
 import br.com.quarkus.project.model.Follower;
 import br.com.quarkus.project.model.User;
 import br.com.quarkus.project.repository.FollowerRepository;
@@ -60,4 +65,21 @@ public class FollowerResource {
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
+	public Response listFollowers(@PathParam("userId") Long userId) {
+
+		// Antes de fazer qualquer busca verificamos se o id existe
+		User user = userRepository.findById(userId);
+		if (user == null) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+
+		List<Follower> list = repository.findByUser(userId);
+		FollowersPerUserResponse responseObject = new FollowersPerUserResponse();
+		responseObject.setFollowersCount(list.size());
+
+		List<FollowerResponse> followerList = list.stream().map(FollowerResponse::new).collect(Collectors.toList());
+
+		responseObject.setContent(followerList);
+		return Response.ok(responseObject).build();
+	}
 }
