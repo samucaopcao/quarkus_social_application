@@ -23,6 +23,7 @@ import br.com.quarkus.project.model.User;
 import br.com.quarkus.project.repository.PostRepository;
 import br.com.quarkus.project.repository.UserRepository;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Sort;
 
 @Path("/users/{userId}/posts")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -66,7 +67,9 @@ public class PostResource {
 		if (user == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		PanacheQuery<Post> query = repository.find("user",user);
+		
+		// Organizando posts de usuário s
+		PanacheQuery<Post> query = repository.find("user",user, Sort.by("dateTime", Sort.Direction.Descending));
 		List<Post> list = query.list();
 		
 		// Mostrando apenas informações essenciais de um Post de usuário
