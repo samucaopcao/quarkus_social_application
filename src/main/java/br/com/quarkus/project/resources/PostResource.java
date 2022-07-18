@@ -65,7 +65,9 @@ public class PostResource {
 	
 	
 	@GET
-	public Response listPost(@PathParam("userId") Long userId, @HeaderParam("followerId") Long followerId) {
+	public Response listPost(
+			@PathParam("userId") Long userId, 
+			@HeaderParam("followerId") Long followerId) {
 		User user = userRepository.findById(userId);
 		if (user == null) {
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -73,13 +75,19 @@ public class PostResource {
 		
 		// Se esqueceu de passar o parâmetro via header
 		if(followerId == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("You forgot the header followerId").build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.entity("You forgot the header followerId")
+					.build();
 		}
 		
 		User follower = userRepository.findById(followerId);
 
 		if(follower == null) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Inexistent followerId").build();
+			return Response
+					.status(Response.Status.BAD_REQUEST)
+					.entity("Inexistent followerId")
+					.build();
 		}
 		
 		
@@ -92,7 +100,7 @@ public class PostResource {
 		}
 		
 		// Organizando posts de usuário s
-		PanacheQuery<Post> query = repository.find("user",user, Sort.by("dateTime", Sort.Direction.Descending));
+		PanacheQuery<Post> query = repository.find("user",Sort.by("dateTime", Sort.Direction.Descending),user);
 		List<Post> list = query.list();
 		
 		// Mostrando apenas informações essenciais de um Post de usuário
