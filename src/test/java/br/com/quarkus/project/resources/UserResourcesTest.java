@@ -4,22 +4,33 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import br.com.quarkus.project.dto.CreateUserRequest;
 import br.com.quarkus.project.resources.exceptions.ResponseError;
+import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // Para ordenar a sequência de execução dos testes
 class UserResourcesTest {
 
+	@TestHTTPResource("/users")
+	URL apiURL;
+	
 	@Test
 	@DisplayName("should create an user sucessfully")
+	@Order(1)
 	public void createUserTest() {
 
 		CreateUserRequest user = new CreateUserRequest();
@@ -33,7 +44,7 @@ class UserResourcesTest {
 						.contentType(ContentType.JSON) // que eu tenho esse conteúdo
 						.body(user) // com esse corpo
 						.when() // QUANDO
-						.post("/users") // faço uma requisição para esse endereço
+						.post(apiURL) // faço uma requisição para esse endereço
 						.then() // ENTÃO
 						.extract().response(); // recebo essa resposta
 
@@ -46,13 +57,14 @@ class UserResourcesTest {
 
 	@Test
 	@DisplayName("should return error when json is not valid")
+	@Order(2)
 	public void createUserValidationErrorTest() {
 
 		var user = new CreateUserRequest();
 		user.setAge(null);
 		user.setName(null);
 
-		var response = given().contentType(ContentType.JSON).body(user).when().post("/users").then().extract()
+		var response = given().contentType(ContentType.JSON).body(user).when().post(apiURL).then().extract()
 				.response();
 
 		assertEquals(ResponseError.UNPROCESSABLE_ENTITY_STATUS, response.statusCode());
@@ -68,6 +80,21 @@ class UserResourcesTest {
 		assertNotNull(errors.get(0).get("message"));
 		assertNotNull(errors.get(1).get("message"));
 
+	}
+	
+	@Test
+	@DisplayName("should list all users")
+	@Order(3)
+	public void listAllUsersTest() {
+		
+		given() // DADO
+			.contentType(ContentType.JSON) // que eu tenho esse conteúdo
+		.when() // QUANDO
+			.get(apiURL) // faço uma requisição para esse endereço
+		.then() // ENTÃO
+			.statusCode(200)
+			.body("size()",Matchers.is(1)); // recebo essa resposta de tamanho do Array
+		
 	}
 
 }
